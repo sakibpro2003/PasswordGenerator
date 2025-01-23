@@ -3,11 +3,23 @@ import "./App.css";
 
 function App() {
   const [sliderValue, setSliderValue] = useState(8);
-  const [generatedPassword, setGeneratedPassword] = useState("");
+  const [generatedPassword, setGeneratedPassword] = useState(
+    "Password appears here"
+  );
 
+  let strength = "";
+  if (sliderValue <= 8) {
+    strength = "Low";
+    console.log(strength, "from low");
+  }
+  if (sliderValue > 8 && sliderValue <= 12) {
+    strength = "Medium";
+  }
+  if (sliderValue > 12) {
+    strength = "High";
+  }
   const handleSlider = (event) => {
     setSliderValue(event.target.value);
-    console.log(sliderValue, "sliderval");
   };
 
   const handleGenPassword = () => {
@@ -26,22 +38,40 @@ function App() {
       return result;
     }
 
-    const res = (makeid(sliderValue - 1));
-    setGeneratedPassword(res)
+    const res = makeid(sliderValue - 1);
+    setGeneratedPassword(res);
   };
   return (
-    <div className="mx-auto mt-4 w-1/2 border-2 ">
-      <h1 className="text-3xl font-bold text-center">Password Generator</h1>
-      <input
-        onChange={handleSlider}
-        type="range"
-        value={sliderValue}
-        min={5}
-        max={17}
-        className="range range-warning"
-      />
-      <h2>Generated Password: {generatedPassword}</h2>
-      <button onClick={handleGenPassword} className="btn">
+    <div className="mx-auto w-5/6 mt-4 lg:w-1/2 border-2 flex flex-col items-center">
+      <h1 className="mb-4 text-3xl font-bold text-center">
+        Password Generator
+      </h1>
+
+      <h1 className="text-center border-2 w-2/3 p-2 h-12">
+        {generatedPassword}
+      </h1>
+      <div className="w-2/3">
+        <input
+          onChange={handleSlider}
+          type="range"
+          value={sliderValue}
+          min={5}
+          max={17}
+          className="range range-sucess"
+        />
+        <p>length: {sliderValue - 1}</p>
+        <p>
+          Strength:{" "}
+          <span
+            className={ `font-bold $
+              ${strength === "Medium" ? "text-yellow-600" : "text-red-600"}
+              ${strength === "High" ? "text-green-600" : "text-red-600"}`}
+          >
+            {strength}
+          </span>
+        </p>
+      </div>
+      <button onClick={handleGenPassword} className="btn ">
         Generate Password
       </button>
     </div>
